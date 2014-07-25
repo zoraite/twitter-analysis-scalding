@@ -1,6 +1,6 @@
 package br.ufc.scalding.jobs
 
-import _root_.cascading.tuple.Fields
+import cascading.tuple.Fields
 import com.twitter.scalding._
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ListBuffer
