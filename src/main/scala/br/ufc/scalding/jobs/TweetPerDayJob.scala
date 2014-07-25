@@ -39,7 +39,8 @@ class TweetPerDayJob(args : Args) extends Job(args) {
     "place_full_name",
     "user_name",
     "user_id",
-    "user_id_str ",
+    "user_id_str",
+    "user_place",
     "user_friends_count",
     "user_created_at",
     "user_screen_name"
