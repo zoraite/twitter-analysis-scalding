@@ -1,11 +1,5 @@
-name := "twitter-scalding"
-
-version := "1.0"
-
-scalaVersion := "2.10.4"
-
 libraryDependencies ++= Seq(
-	"com.twitter" %% "scalding-core" % "0.11.1"
+    "com.twitter" %% "scalding-core" % "0.11.1"
 )
 
 initialCommands in console := """
