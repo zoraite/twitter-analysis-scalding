@@ -52,7 +52,7 @@ class UniqueUsersJob (args : Args) extends Job(args) {
   val f = Csv( args("input"), fields=schema )
     .read
     .project("user_id_str")
-    .groupBy('user_id_str){ _.size }
+    .unique('user_id_str)
     .groupAll { _.size }
     .write( Tsv( args("output") ) )
 
