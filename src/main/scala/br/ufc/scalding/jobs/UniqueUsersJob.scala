@@ -49,7 +49,7 @@ class UniqueUsersJob (args : Args) extends Job(args) {
   )
 
 
-  val f = Csv( args("input"), fields=schema )
+  val f = Tsv( args("input"), fields=schema, skipHeader=true )
     .read
     .project("user_id_str")
     .unique('user_id_str)

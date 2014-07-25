@@ -6,7 +6,7 @@ import com.twitter.scalding._
  *
  * Generate trajectories from tweets
  */
-class TrajJob(args : Args) extends Job(args) {
+class TrajGeneratorJob(args : Args) extends Job(args) {
 
   val f = TextLine( args("input") )
     .flatMap('line -> 'pair) {

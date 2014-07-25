@@ -46,7 +46,7 @@ class UsersPerDayJob(args : Args) extends Job(args) {
   )
 
 
-  val f = Csv( args("input"), fields=schema )
+  val f = Tsv( args("input"), fields=schema, skipHeader=true )
     .read
     .project("user_id","created_at_str")
     // remove duplicates
