@@ -46,7 +46,7 @@ class TrajsPerDayJob(args : Args) extends Job(args) {
   )
 
 
-  val f = Tsv( args("input"), fields=schema, writeHeader=true )
+  val f = Tsv( args("input"), fields=schema )
     .read
     .project("user_id", "id_tweet", "created_at_str")
     // remove duplicates
@@ -54,5 +54,5 @@ class TrajsPerDayJob(args : Args) extends Job(args) {
     .groupBy( 'user_id, 'created_at_str ) { _.size  }
     .filter( 'size ) { size : Int => (size > 1)}
     .groupBy( 'created_at_str ) { _.size  }
-    .write( Tsv( args("output") ) )
+    .write( Tsv( args("output"), writeHeader=true ) )
 }

@@ -51,29 +51,39 @@ class ODMatrixJob(args : Args) extends Job(args) {
   val format1 = new java.text.SimpleDateFormat("yyyy-MM-dd")
   val format2 = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss +0000 yyyy", Locale.ENGLISH)  // Mon Jun 09 21:59:59 +0000 2014
 
-//  Tsv( args("estados"), fields=estadosSchema, skipHeader=false)
+  var stateList = TextLine( args("input"))
+    .pipe
+    .mapTo('line -> ('id, 'geom, 'uf, 'name, 'region)) {
+      line : String => {
+        var l = line.split(";")
+        (l(0), l(1), l(2), l(3), l(4))
+      }
+    }
+    stateList.write( Tsv( args("output") ) )
 
-  val f = Tsv( args("input"), fields=schema, writeHeader=true )
-    .read
-    .project("user_id", "place_name", "created_at", "created_at_str")
-    // remove duplicates
-    .map ('created_at_str-> 'created_at_str_date) {x: String => format1.parse(x.replace("\"", "")) }
-    .map ('created_at-> 'created_at_date) {x: String => format2.parse(x.replace("\"", "")) }
-    .groupAll { _.sortBy('user_id, 'created_at_date) }
-    .groupBy( 'user_id, 'created_at_str_date ) { _.mkString('place_name, ";")  }
-    .filter( 'place_name ) { s : String => ( s.split(";").length > 1) }
-    .flatMap('place_name -> 'pair) {
-    line : String =>
-    // create scala list
-      val list = line.split(";").toList
+  println(stateList)
 
-      // merge the two list
-      val pairs = list zip list.tail
-
-      // create list of pairs a-b
-      pairs.map { case (a, b) => a + "-" + b }
-  }
-    .groupBy('pair) { _.size }
-    .groupAll { _.sortBy('size).reverse }
-    .write( Tsv( args("output") ) )
+  //  val f = Tsv( args("input"), fields=schema, writeHeader=true )
+  //    .read
+  //    .project("user_id", "place_name", "created_at", "created_at_str")
+  //    // remove duplicates
+  //    .map ('created_at_str-> 'created_at_str_date) {x: String => format1.parse(x.replace("\"", "")) }
+  //    .map ('created_at-> 'created_at_date) {x: String => format2.parse(x.replace("\"", "")) }
+  //    .groupAll { _.sortBy('user_id, 'created_at_date) }
+  //    .groupBy( 'user_id, 'created_at_str_date ) { _.mkString('place_name, ";")  }
+  //    .filter( 'place_name ) { s : String => ( s.split(";").length > 1) }
+  //    .flatMap('place_name -> 'pair) {
+  //    line : String =>
+  //    // create scala list
+  //      val list = line.split(";").toList
+  //
+  //      // merge the two list
+  //      val pairs = list zip list.tail
+  //
+  //      // create list of pairs a-b
+  //      pairs.map { case (a, b) => a + "-" + b }
+  //  }
+  //    .groupBy('pair) { _.size }
+  //    .groupAll { _.sortBy('size).reverse }
+  //    .write( Tsv( args("output") ) )
 }

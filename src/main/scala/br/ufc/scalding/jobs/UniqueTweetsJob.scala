@@ -43,10 +43,10 @@ class UniqueTweetsJob(args : Args) extends Job(args) {
     "user_screen_name"
   )
 
-  val f = Tsv( args("input"), fields=schema, writeHeader=true )
+  val f = Tsv( args("input"), fields=schema )
     .read
     .project("id")
     .groupBy('id){ _.size }
     .groupAll{ _.size }
-    .write( Tsv( args("output") ) )
+    .write( Tsv( args("output"), writeHeader=true ) )
 }
