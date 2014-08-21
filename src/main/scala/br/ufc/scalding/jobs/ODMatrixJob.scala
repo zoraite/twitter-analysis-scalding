@@ -46,12 +46,14 @@ class ODMatrixJob(args : Args) extends Job(args) {
     "user_screen_name"
   )
 
+  val estadosSchema = new Fields("id", "geom", "uf", "name", "region")
+
   val format1 = new java.text.SimpleDateFormat("yyyy-MM-dd")
   val format2 = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss +0000 yyyy", Locale.ENGLISH)  // Mon Jun 09 21:59:59 +0000 2014
 
-  println(format2.format( new Date()))
+  Tsv( args("estados"), fields=estadosSchema, skipHeader=false)
 
-  val f = Tsv( args("input"), fields=schema, skipHeader=true )
+  val f = Tsv( args("input"), fields=schema, writeHeader=true )
     .read
     .project("user_id", "place_name", "created_at", "created_at_str")
     // remove duplicates

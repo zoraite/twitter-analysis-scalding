@@ -47,7 +47,7 @@ class TweetPerDayJob(args : Args) extends Job(args) {
   )
 
 
-  val f = Tsv( args("input"), fields=schema, skipHeader=true )
+  val f = Tsv( args("input"), fields=schema, writeHeader=true )
     .read
     .project("id","created_at_str")
     // remove duplicates

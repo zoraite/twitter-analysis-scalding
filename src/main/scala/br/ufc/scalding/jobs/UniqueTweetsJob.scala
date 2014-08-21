@@ -46,7 +46,7 @@ class UniqueTweetsJob(args : Args) extends Job(args) {
   println("Started Job")
 
 
-  val f = Tsv( args("input"), fields=schema, skipHeader=true )
+  val f = Tsv( args("input"), fields=schema, writeHeader=true )
     .read
     .project("id")
     .groupBy('id){ _.size }

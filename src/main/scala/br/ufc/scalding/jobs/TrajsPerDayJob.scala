@@ -46,7 +46,7 @@ class TrajsPerDayJob(args : Args) extends Job(args) {
   )
 
 
-  val f = Tsv( args("input"), fields=schema, skipHeader=true )
+  val f = Tsv( args("input"), fields=schema, writeHeader=true )
     .read
     .project("user_id", "id_tweet", "created_at_str")
     // remove duplicates
