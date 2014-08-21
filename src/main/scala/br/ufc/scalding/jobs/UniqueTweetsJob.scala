@@ -43,9 +43,6 @@ class UniqueTweetsJob(args : Args) extends Job(args) {
     "user_screen_name"
   )
 
-  println("Started Job")
-
-
   val f = Tsv( args("input"), fields=schema, writeHeader=true )
     .read
     .project("id")
