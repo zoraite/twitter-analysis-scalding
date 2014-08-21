@@ -112,5 +112,5 @@ class JoinTweetStateJob(args : Args) extends Job(args) {
       }
 //      .project('place_name, 'name_state)
       .discard('geom)
-      .write( Tsv( args("output"), writeHeader = true ) )
+      .write( Tsv( args("output") ) )
 }
