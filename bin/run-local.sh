@@ -1,6 +1,6 @@
 
 BIN="../../scalding/scripts/scald.rb"
-JOBS="../twitter-analysis-scalding/src/main/scala/br/ufc/scalding/jobs/"
+JOBS="../src/main/scala/br/ufc/scalding/jobs/"
 
 INPUT="../../brasil-georef-tweets-world-cup-2014.tsv"
 

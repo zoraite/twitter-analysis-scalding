@@ -1,6 +1,6 @@
 
-BIN="../scalding/scripts/scald.rb"
-JOBS="../twitter-scalding/src/main/scala/br/ufc/scalding/jobs/"
+BIN="../../scalding/scripts/scald.rb"
+JOBS="../src/main/scala/br/ufc/scalding/jobs/"
 
 INPUT="../data/small-sample.tsv"
 ESTADOS="../data/brasil-estados.tsv"
