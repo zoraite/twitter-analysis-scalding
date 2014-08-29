@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BIN="~/foo/hadoop-1.0.3/bin/hadoop"
+BIN="hadoop"
 JAR="../target/scala-2.10/twitter-analysis-scalding-0.0.1.jar"
 JOBS="br.ufc.scalding.jobs"
 INPUT="/output-brasil/brasil-tweets-state.tsv"
