@@ -14,7 +14,7 @@ do
     -D mapred.child.java.opts=-Xmx2048m \
     -D mapred.reduce.tasks=20 \
     ${JOBS}"."${JOB} \
-    --local \
+    --hdfs \
     --input ${INPUT} \
     --output ${OUTPUT}${JOB}
 done

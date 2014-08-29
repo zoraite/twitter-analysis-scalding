@@ -15,7 +15,7 @@ com.twitter.scalding.Tool \
 -D mapred.child.java.opts=-Xmx2048m \
 -D mapred.reduce.tasks=20 \
 ${JOBS}"."${JOB} \
---local \
+--hdfs \
 --input ${INPUT} \
 --estados ${ESTADOS}  \
 --output ${OUTPUT}${JOB}
