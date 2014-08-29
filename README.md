@@ -9,11 +9,15 @@ It relies on Scalding framework for Scala language to execute the jobs on a hado
 
 Since it runs on hadoop, the dataset must be added into hdfs. 
 
+Requirements:
+- Scala 2.10.4
+- SBT 0.13.2
+
 Generate the "fat jar"
 =======================
 git clone twitter-analysis-scalding
+
 sbt assembly
 
-After that, the scripts *.sh in bin/ can be executed. Recalling you may have to set up the hadoop
-on the scripts.
+After that, the jar will be created on target/scala-2.10/twitter-analysis-scalding-*.jar. Scripts *.sh in bin/ can be now executed. Recalling you may have to set up the hadoop on the scripts -- BIN="hadoop"
 
