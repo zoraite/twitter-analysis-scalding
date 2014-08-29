@@ -2,6 +2,8 @@ package br.ufc.scalding.jobs
 import com.twitter.scalding._
 import _root_.cascading.tuple.Fields
 import java.util.{Locale, Date}
+import com.vividsolutions.jts.io.WKTReader
+import com.vividsolutions.jts.geom.{Point, Coordinate, GeometryFactory, Geometry}
 
 /**
 
@@ -52,65 +54,75 @@ class JoinTweetStateJob(args : Args) extends Job(args) {
   val format2 = new java.text.SimpleDateFormat("EEE MMM dd HH:mm:ss +0000 yyyy", Locale.ENGLISH)  // Mon Jun 09 21:59:59 +0000 2014
 
 
-  def pointWithinPolygon( point : (Double, Double), polygon : Array[(Double, Double)] ) : Boolean = {
+  def pointWithinPolygon( lng: String, lat: String, wkt: String ) : Boolean = {
 
-    val n = polygon.length;
-    var c = false
-    var i = 0
-    val (x,y) = point
-    var j = n-1
+    val point = createPoint(lng, lat)
+    val multipolygon = getPolygonFromWKT(wkt)
 
-    while (i < n) {
-      val (px_i, py_i) = polygon(i)
-      val (px_j, py_j) = polygon(j)
-
-      if (((( py_i <= y ) && (y < py_j)) || ((py_j <= y) && (y < py_i))) && (x < (px_j - px_i) * (y - py_i) / (py_j - py_i) + px_i))
-        c = !c;
-
-      j = i
-      i += 1
-    }
-
-    return c
+    multipolygon.contains(point);
+//    val n = polygon.length;
+//    var c = false
+//    var i = 0
+//    val (x,y) = point
+//    var j = n-1
+//
+//    while (i < n) {
+//      val (px_i, py_i) = polygon(i)
+//      val (px_j, py_j) = polygon(j)
+//
+//      if (((( py_i <= y ) && (y < py_j)) || ((py_j <= y) && (y < py_i))) && (x < (px_j - px_i) * (y - py_i) / (py_j - py_i) + px_i))
+//        c = !c;
+//
+//      j = i
+//      i += 1
+//    }
+//
+//    return c
   }
 
-  def getPolygonFromWKT( wkt : String ) : Array[(Double, Double)] = {
-    val t = wkt.replace("MULTIPOLYGON", "").replace(")", "").replace("(", "")
-    val coordinates = t.split(",")
+  def getPolygonFromWKT( wkt : String ) : Geometry = {
 
-    coordinates.map( s => {
-      val coordinate = s.split(" ");
-      ( coordinate(0).toDouble, coordinate(1).toDouble )
-    })
+    val wktReader = new WKTReader()
+
+    return wktReader.read(wkt);
+
+    //    val t = wkt.replace("MULTIPOLYGON", "").replace(")", "").replace("(", "")
+    //    val coordinates = t.split(",")
+    //
+    //    coordinates.map( s => {
+    //      val coordinate = s.split(" ");
+    //      ( coordinate(0).toDouble, coordinate(1).toDouble )
+    //    })
+  }
+
+  def createPoint( lng: String, lat: String ) : Point = {
+    val fact = new GeometryFactory();
+    val coordinates = new Coordinate(lng.toDouble, lat.toDouble)
+
+    fact.createPoint(coordinates)
   }
 
   var stateList = TextLine( args("estados") )
     .pipe
     .mapTo('line -> ('id_state, 'geom, 'uf, 'name_state, 'region)) {
-      line : String => {
-        var l = line.split(";")
-        (l(0), getPolygonFromWKT(l(1)), l(2), l(3), l(4))
-      }
+    line : String => {
+      var l = line.split(";")
+      (l(0), l(1), l(2), l(3), l(4))
     }
+  }
 
 
-    val f = Tsv( args("input"), fields=schema, writeHeader=true )
-      .read
-//      .project("user_id", "place_name", "created_at", "created_at_str")
-//      // remove duplicates
-      .map ('latitude -> 'latitude) { lat : String => lat.toDouble}
-      .map ('longitude -> 'longitude) { lng : String => lng.toDouble}
-//      .map ('created_at_str-> 'created_at_str_date) {x: String => format1.parse(x.replace("\"", "")) }
-//      .map ('created_at-> 'created_at_date) {x: String => format2.parse(x.replace("\"", "")) }
-      .crossWithTiny(stateList)
-      .filter('longitude, 'latitude, 'geom) {
-        fields : (Double, Double, Array[(Double, Double)]) => {
-          val (lng, lat, polygon) = fields
+  val f = Tsv( args("input"), fields=schema, writeHeader=true )
+    .read
+    .crossWithTiny(stateList)
+    .filter('longitude, 'latitude, 'geom) {
+    fields : (String, String, String) => {
+      val (lng, lat, polygon) = fields
 
-          pointWithinPolygon( (lng, lat), polygon )
-        }
-      }
-//      .project('place_name, 'name_state)
-      .discard('geom)
-      .write( Tsv( args("output") ) )
+      pointWithinPolygon( lng, lat, polygon )
+    }
+  }
+    //      .project('place_name, 'name_state)
+    .discard('geom)
+    .write( Tsv( args("output") ) )
 }

@@ -1,3 +1,4 @@
+#!/bin/sh
 
 BIN="../../scalding/scripts/scald.rb"
 JOBS="../src/main/scala/br/ufc/scalding/jobs/"
