@@ -12,8 +12,8 @@ Since it runs on hadoop, the dataset must be added into hdfs.
 Generate the "fat jar"
 =======================
 git clone twitter-analysis-scalding
+
 sbt assembly
 
-After that, the scripts *.sh in bin/ can be executed. Recalling you may have to set up the hadoop
-on the scripts.
+After that, the jar will be created on target/scala-2.10/twitter-analysis-scalding-*.jar. Scripts *.sh in bin/ can be now executed. Recalling you may have to set up the hadoop on the scripts -- BIN="hadoop"
 
