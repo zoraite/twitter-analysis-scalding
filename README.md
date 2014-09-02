@@ -17,7 +17,14 @@ Generate the "fat jar"
 =======================
 git clone twitter-analysis-scalding
 
+cd twitter-analysis-scalding
+
+sbt clean
+
 sbt assembly
 
-After that, the jar will be created on target/scala-2.10/twitter-analysis-scalding-*.jar. Scripts *.sh in bin/ can be now executed. Recalling you may have to set up the hadoop on the scripts -- BIN="hadoop"
+After that, the jar will be created on target/scala-2.10/twitter-analysis-scalding-*.jar. 
+Scripts *.sh in bin/ can be now executed. 
+
+Recalling you may have to set up the hadoop on the scripts -- BIN="hadoop"
 
