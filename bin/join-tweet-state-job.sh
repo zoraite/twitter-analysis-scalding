@@ -11,9 +11,6 @@ JOB="JoinTweetStateJob"
 
 ${BIN} jar ${JAR} \
 com.twitter.scalding.Tool \
--D mapred.output.compress=false  \
--D mapred.child.java.opts=-Xmx2048m \
--D mapred.reduce.tasks=20 \
 ${JOBS}"."${JOB} \
 --hdfs \
 --input ${INPUT} \
