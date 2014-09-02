@@ -1,23 +1,22 @@
 #!/bin/sh
 
 BIN="hadoop"
+#BIN="././../../scalding/scripts/scald.rb"
 JAR="../target/scala-2.10/twitter-analysis-scalding-0.0.1.jar"
 JOBS="br.ufc.scalding.jobs"
-INPUT="../../data/small-sample.tsv"
+#JOBS="././../src/main/scala/br/ufc/scalding/jobs/"
+INPUT="../../data/brasil-tweets-state-sample.tsv"
 ESTADOS="../../data/brasil-estados.tsv"
 OUTPUT="../../results/"
 
-for JOB in "JoinTweetStateJob"
+for JOB in "TweetsPerStateJob"
 do
     ${BIN} jar ${JAR} \
     com.twitter.scalding.Tool \
-    -D mapred.output.compress=false  \
-    -D mapred.child.java.opts=-Xmx2048m \
-    -D mapred.reduce.tasks=20 \
     ${JOBS}"."${JOB} \
     --local \
     --input ${INPUT} \
-    --estados ${ESTADOS}  \
     --output ${OUTPUT}${JOB}
-#    ${BIN} "--local" ${JOBS}""${JOB}".scala" "--input "${INPUT} "--estados "${ESTADOS} "--output" ${OUTPUT}"/"${JOB}
+
+#    ${BIN} "--local" ${JOBS}""${JOB}".scala" "--input "${INPUT} "--output" ${OUTPUT}"/"${JOB}
 done
