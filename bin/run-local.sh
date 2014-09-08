@@ -3,9 +3,9 @@
 BIN="../../scalding/scripts/scald.rb"
 JOBS="../src/main/scala/br/ufc/scalding/jobs/"
 
-INPUT="../../brasil-georef-tweets-world-cup-2014.tsv"
+INPUT="../../brasil-tweets-state-sample.tsv.tsv"
 
-for JOB in "UniqueUsersJob" "UniqueTweetsJob" "TweetPerDayJob" "UsersPerDayJob"
+for JOB in "CheckInPerStateJob"
 do
     echo "Start Job: "$JOB
     $BIN "--local" $JOBS""$JOB".scala" "--input "$INPUT "--output" "../../"$JOB
