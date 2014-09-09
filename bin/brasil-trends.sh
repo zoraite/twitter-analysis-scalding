@@ -13,6 +13,8 @@ for JOB in "BrasilTrendsJob"
 do
     ${BIN} jar ${JAR} \
     com.twitter.scalding.Tool \
+    -D mapred.reduce.tasks=20 \
+    -D mapred.min.split.size=2000000000 \
     ${JOBS}"."${JOB} \
     --hdfs \
     --input ${INPUT} \
