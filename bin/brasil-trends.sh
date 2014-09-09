@@ -9,7 +9,7 @@ INPUT="/tweet-data/brasil-tweets-state.tsv"
 STOP="/stopwords.tsv"
 OUTPUT="/output-brasil/"
 
-for JOB in "BrasilTrendsJob"
+for JOB in "BrasilTrendsJob" "StateTrendsJob"
 do
     ${BIN} jar ${JAR} \
     com.twitter.scalding.Tool \
