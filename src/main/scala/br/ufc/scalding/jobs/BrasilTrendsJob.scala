@@ -50,7 +50,6 @@ class BrasilTrendsJob(args : Args) extends Job(args) {
   )
 
   val format1 = new java.text.SimpleDateFormat("yyyy-MM-dd")
-  val checkinPrefix = "I\'m at"
 
   // read stop words pipe
   val stopPipe = Tsv( args("stop"), ('stop)).read
@@ -68,7 +67,7 @@ class BrasilTrendsJob(args : Args) extends Job(args) {
         (scrub(token), created_at.replace("\"", ""))
       }
     }
-    .filter('token) { token : String => token.length > 1 }
+    .filter('token) { token : String => token.length > 1 && token.startsWith("#") }
     .leftJoinWithTiny('token -> 'stop, stopPipe)
     .filter('stop) { stop : String => {
         stop == null
