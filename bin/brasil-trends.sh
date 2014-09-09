@@ -16,6 +16,7 @@ do
     ${JOBS}"."${JOB} \
     --hdfs \
     --input ${INPUT} \
+    --stop ${STOP} \
     --output ${OUTPUT}${JOB}
 
 done
