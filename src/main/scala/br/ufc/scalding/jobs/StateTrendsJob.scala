@@ -9,7 +9,7 @@ import _root_.cascading.tuple.Fields
  * Date: 08/09/14
  * Time: 23:54
  */
-class BrasilTrendsJob(args : Args) extends Job(args) {
+class StateTrendsJob(args : Args) extends Job(args) {
   val schema = new Fields(
     "id",
     "text",
@@ -57,25 +57,25 @@ class BrasilTrendsJob(args : Args) extends Job(args) {
 
   val f = Tsv( args("input"), fields=schema )
     .read
-    .project('text, 'created_at_str)
-    .unique('text, 'created_at_str)
+    .project('text, 'created_at_str, 'state_uf)
+    .unique('text, 'created_at_str, 'state_uf)
     .flatMap('text -> 'token) { text : String => text.replaceAll("\"", "").split("[ \\[\\]\\(\\),.]") }
     .discard('text)
-    .mapTo(('token, 'created_at_str) -> ('token, 'created_at_str)) {
-    x : (String, String) => {
-        val (token, created_at) = x
-        (scrub(token), created_at.replace("\"", ""))
-      }
+    .mapTo(('token, 'created_at_str, 'state_uf) -> ('token, 'created_at_str, 'state_uf)) {
+    x : (String, String, String) => {
+      val (token, created_at, state) = x
+      (scrub(token), created_at.replace("\"", ""), state)
     }
+  }
     .filter('token) { token : String => token.length > 1 && token.startsWith("#") }
     .leftJoinWithTiny('token -> 'stop, stopPipe)
     .filter('stop) { stop : String => {
-        stop == null
-      }
-    }
-    .groupBy('token, 'created_at_str) { _.size('count) }
-    .groupBy('created_at_str){ _.sortBy('count).reverse.take( args("k").toInt ) }
-    .groupAll { _.sortBy('created_at_str)}
+    stop == null
+  }
+  }
+    .groupBy('state_uf, 'token, 'created_at_str) { _.size('count) }
+    .groupBy('state_uf, 'created_at_str){ _.sortBy('count).reverse.take( args("k").toInt ) }
+    .groupAll { _.sortBy('state_uf, 'created_at_str)}
     .write( Tsv( args("output") ) )
 
   def scrub(token : String) : String = {

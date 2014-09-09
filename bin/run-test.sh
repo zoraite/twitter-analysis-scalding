@@ -19,5 +19,5 @@ do
 #    --input ${INPUT} \
 #    --output ${OUTPUT}${JOB}
 
-    ${BIN} "--local" ${JOBS}""${JOB}".scala" "--input "${INPUT} "--stop "${STOP}  "--output "${OUTPUT}""${JOB}
+    ${BIN} "--local" ${JOBS}""${JOB}".scala" "--input "${INPUT} "--stop "${STOP} "--k 3"  "--output "${OUTPUT}""${JOB}
 done
