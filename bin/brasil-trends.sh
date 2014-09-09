@@ -8,6 +8,7 @@ JOBS="br.ufc.scalding.jobs"
 INPUT="/tweet-data/brasil-tweets-state.tsv"
 STOP="/stopwords.tsv"
 OUTPUT="/output-brasil/"
+TOP=20
 
 for JOB in "BrasilTrendsJob" "StateTrendsJob"
 do
@@ -18,6 +19,8 @@ do
     ${JOBS}"."${JOB} \
     --hdfs \
     --input ${INPUT} \
+    --stop ${STOP} \
+    --k ${TOP} \
     --output ${OUTPUT}${JOB}
 
 done
