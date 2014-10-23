@@ -14,7 +14,7 @@ do
     ${BIN} jar ${JAR} \
     com.twitter.scalding.Tool \
     ${JOBS}"."${JOB} \
-    --hdfs \
+    --local \
     --input ${INPUT} \
     --output ${OUTPUT}${JOB}
 
